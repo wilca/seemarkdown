@@ -24,6 +24,9 @@ SeeMarkdown es un editor y visualizador de Markdown del lado del cliente, constr
 1. Clona el repositorio.
 2. Instala las dependencias: `npm install`
 3. Ejecuta el servidor de desarrollo: `npm run dev`
+4. crea un servidor en discord para recibir los mensajes del formulario de contacto.
+5. crea un archivo .env con las variables de entorno.
+6. Abre `http://localhost:5173` en tu navegador.
 
 ## Contacto
 
