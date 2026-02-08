@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 export default function EditorPage() {
     const [markdown, setMarkdown] = useState('');
     const [viewMode, setViewMode] = useState('split'); // edit, preview, split
-    const [fileName, setFileName] = useState('untitled.md');
+    const [fileName, setFileName] = useState('seemarkdown.md');
     const textareaRef = useRef(null);
 
     // Load from LocalStorage on mount
