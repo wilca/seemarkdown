@@ -34,6 +34,11 @@ En esta sesión, hemos desarrollado y mejorado "SeeMarkdown", una aplicación we
 - Creación de `.gitignore` adecuado.
 - Preparación para despliegue en GitHub (configuración de remoto y ramas).
 
+### 6. Resolución de Problemas PWA
+- **Generación de Iconos**: Se creó el script `scripts/generate-icons.js` para generar automáticamente los iconos requeridos por la PWA (192, 512, apple-icon, favicon) a partir de una imagen base (en este caso, `vite.svg` debido a límites de cuota de generación de imágenes).
+- **Configuración de Desarrollo**: Se habilitó `devOptions: { enabled: true }` en `vite.config.js` para permitir la instalación y prueba de la PWA en el entorno de desarrollo local, solucionando el problema donde el navegador no detectaba la PWA.
+- **Verificación**: Se confirmó la generación correcta del `manifest.webmanifest` y el Service Worker (`sw.js`).
+
 ## Estado Actual
 El proyecto es totalmente funcional. El editor permite escribir, guardar y descargar archivos. El formulario de contacto envía mensajes a Discord, y la visualización de Markdown es estéticamente agradable y legible tanto en modo claro como oscuro.
 

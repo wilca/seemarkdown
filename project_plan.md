@@ -75,5 +75,8 @@ seemarkdown/
 - **Visualizador**:
     - Subir un archivo `.md` válido -> verificar contenido.
     - Arrastrar y soltar archivo.
-- **PWA**: Verificar instalación y carga offline.
+- **PWA**: 
+    - Verificar instalación y carga offline.
+    - **Nota de Desarrollo**: Para probar la instalación en `npm run dev`, se debe asegurar que `devOptions.enabled` esté en `true` en `vite.config.js`.
+    - Generación de iconos mediante `node scripts/generate-icons.js <source-image>`.
 - **Tema**: El interruptor cambia los colores correctamente y persiste.
