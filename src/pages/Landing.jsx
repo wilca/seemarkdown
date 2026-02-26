@@ -178,6 +178,7 @@ function ContactForm() {
                     required
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-dark-border bg-white dark:bg-dark-bg focus:ring-2 focus:ring-primary-500 outline-none transition-all"
                     placeholder="Tu nombre"
+                    maxLength={100}
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 />
@@ -190,6 +191,7 @@ function ContactForm() {
                     rows={4}
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-dark-border bg-white dark:bg-dark-bg focus:ring-2 focus:ring-primary-500 outline-none transition-all resize-none"
                     placeholder="¿En qué podemos ayudarte?"
+                    maxLength={2000}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 />

@@ -16,6 +16,17 @@ export default function ViewerPage() {
         setError('');
         if (!file) return;
 
+        if (file.size > 5 * 1024 * 1024) {
+            setError('El archivo no puede superar 5MB');
+            return;
+        }
+
+        const validMime = ['text/plain', 'text/markdown', 'application/octet-stream'];
+        if (!validMime.includes(file.type) && !file.name.endsWith('.md')) {
+            setError('Formato no soportado. Por favor sube un archivo Markdown (.md)');
+            return;
+        }
+
         if (!file.name.endsWith('.md') && !file.name.endsWith('.txt')) {
             setError('Formato no soportado. Por favor sube un archivo Markdown (.md)');
             return;
