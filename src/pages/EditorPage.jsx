@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Toolbar } from '../components/Editor/Toolbar';
 import { MarkdownPreview } from '../components/Editor/MarkdownPreview';
 import { Button } from '../components/UI/Button';
-import { Download, Trash2, FilePlus, AlertCircle } from 'lucide-react';
+import { Download, Trash2, FilePlus, AlertCircle, ArrowUp } from 'lucide-react';
 
 import Swal from 'sweetalert2';
 
@@ -10,7 +10,17 @@ export default function EditorPage() {
     const [markdown, setMarkdown] = useState('');
     const [viewMode, setViewMode] = useState('split'); // edit, preview, split
     const [fileName, setFileName] = useState('seemarkdown.md');
+    const [showScrollTop, setShowScrollTop] = useState(false);
     const textareaRef = useRef(null);
+    const previewRef = useRef(null);
+
+    const handlePreviewScroll = () => {
+        setShowScrollTop(previewRef.current?.scrollTop > 200);
+    };
+
+    const scrollPreviewToTop = () => {
+        previewRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     // Load from LocalStorage on mount
     useEffect(() => {
@@ -129,14 +139,26 @@ export default function EditorPage() {
                 </div>
 
                 {/* Preview Pane */}
-                <div className={`
-          flex-1 h-full overflow-auto bg-gray-50 dark:bg-dark-surface transition-all duration-300
+                <div
+                    ref={previewRef}
+                    onScroll={handlePreviewScroll}
+                    className={`
+          flex-1 h-full overflow-auto bg-gray-50 dark:bg-dark-surface transition-all duration-300 relative
           ${viewMode === 'edit' ? 'hidden' : 'block'}
           ${viewMode === 'split' ? 'w-1/2' : 'w-full'}
         `}>
                     <div className="p-8 max-w-3xl mx-auto">
                         <MarkdownPreview content={markdown} />
                     </div>
+                    {showScrollTop && (
+                        <button
+                            onClick={scrollPreviewToTop}
+                            title="Volver al inicio"
+                            className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary-500 text-white shadow-lg hover:bg-primary-600 transition-all duration-200"
+                        >
+                            <ArrowUp className="h-5 w-5" />
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

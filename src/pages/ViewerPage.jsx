@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 // Wait, I didn't install react-dropzone. I should use native drag and drop or install it.
 // Native is fine and lighter.
-import { Upload, FileText, X, AlertTriangle } from 'lucide-react';
+import { Upload, FileText, X, AlertTriangle, ArrowUp } from 'lucide-react';
 import { MarkdownPreview } from '../components/Editor/MarkdownPreview';
 import { Button } from '../components/UI/Button';
 
@@ -11,6 +11,15 @@ export default function ViewerPage() {
     const [fileName, setFileName] = useState('');
     const [error, setError] = useState('');
     const [isDragOver, setIsDragOver] = useState(false);
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => setShowScrollTop(window.scrollY > 200);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
     const processFile = (file) => {
         setError('');
@@ -87,23 +96,35 @@ export default function ViewerPage() {
 
     if (content) {
         return (
-            <div className="min-h-[calc(100vh-4rem)] p-4 md:p-8 bg-gray-50 dark:bg-dark-bg">
-                <div className="max-w-4xl mx-auto">
-                    <div className="flex justify-between items-center mb-6 bg-white dark:bg-dark-surface p-4 rounded-lg shadow-sm">
-                        <div className="flex items-center gap-3">
-                            <FileText className="h-6 w-6 text-primary-500" />
-                            <h1 className="text-xl font-bold truncate max-w-xs sm:max-w-md">{fileName}</h1>
+            <>
+                <div className="min-h-[calc(100vh-4rem)] p-4 md:p-8 bg-gray-50 dark:bg-dark-bg">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="flex justify-between items-center mb-6 bg-white dark:bg-dark-surface p-4 rounded-lg shadow-sm">
+                            <div className="flex items-center gap-3">
+                                <FileText className="h-6 w-6 text-primary-500" />
+                                <h1 className="text-xl font-bold truncate max-w-xs sm:max-w-md">{fileName}</h1>
+                            </div>
+                            <Button variant="ghost" onClick={clearFile} title="Cerrar archivo">
+                                <X className="h-5 w-5" />
+                            </Button>
                         </div>
-                        <Button variant="ghost" onClick={clearFile} title="Cerrar archivo">
-                            <X className="h-5 w-5" />
-                        </Button>
-                    </div>
 
-                    <div className="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-sm min-h-[500px]">
-                        <MarkdownPreview content={content} />
+                        <div className="bg-white dark:bg-dark-surface p-8 rounded-lg shadow-sm min-h-[500px]">
+                            <MarkdownPreview content={content} />
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                {showScrollTop && (
+                    <button
+                        onClick={scrollToTop}
+                        title="Volver al inicio"
+                        className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary-500 text-white shadow-lg hover:bg-primary-600 transition-all duration-200"
+                    >
+                        <ArrowUp className="h-5 w-5" />
+                    </button>
+                )}
+            </>
         );
     }
 
