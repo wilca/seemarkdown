@@ -1,11 +1,14 @@
 import {
-    Bold, Italic, Heading1, Heading2, Heading3,
+    Bold, Italic, Heading1, Heading2,
     List, ListOrdered, Link, Image, Code, Quote,
-    Columns, LayoutTemplate, Monitor
+    Columns, Monitor
 } from 'lucide-react';
 import { Button } from '../UI/Button';
+import { useLanguage } from '../../context/LanguageContext';
 
 export function Toolbar({ onInsert, viewMode, setViewMode }) {
+    const { t } = useLanguage();
+
     const tools = [
         { icon: <Heading1 className="h-4 w-4" />, label: 'H1', action: () => onInsert('# ', '') },
         { icon: <Heading2 className="h-4 w-4" />, label: 'H2', action: () => onInsert('## ', '') },
@@ -41,7 +44,7 @@ export function Toolbar({ onInsert, viewMode, setViewMode }) {
                     variant={viewMode === 'edit' ? 'primary' : 'ghost'}
                     size="sm"
                     onClick={() => setViewMode('edit')}
-                    title="Solo Editor"
+                    title={t.toolbar.editOnly}
                     className="h-8 w-8 p-0"
                 >
                     <EditIcon className="h-4 w-4" />
@@ -50,7 +53,7 @@ export function Toolbar({ onInsert, viewMode, setViewMode }) {
                     variant={viewMode === 'split' ? 'primary' : 'ghost'}
                     size="sm"
                     onClick={() => setViewMode('split')}
-                    title="Dividido"
+                    title={t.toolbar.split}
                     className="h-8 w-8 p-0"
                 >
                     <Columns className="h-4 w-4" />
@@ -59,7 +62,7 @@ export function Toolbar({ onInsert, viewMode, setViewMode }) {
                     variant={viewMode === 'preview' ? 'primary' : 'ghost'}
                     size="sm"
                     onClick={() => setViewMode('preview')}
-                    title="Solo Vista Previa"
+                    title={t.toolbar.previewOnly}
                     className="h-8 w-8 p-0"
                 >
                     <Monitor className="h-4 w-4" />
@@ -70,7 +73,6 @@ export function Toolbar({ onInsert, viewMode, setViewMode }) {
 }
 
 function EditIcon({ className }) {
-    // Simple edit icon wrapper to avoid conflict with imported 'Image' etc if I were to use lucide 'Edit' which might clash
     return (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
     );

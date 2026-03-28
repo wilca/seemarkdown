@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from 'react';
 import { Toolbar } from '../components/Editor/Toolbar';
 import { MarkdownPreview } from '../components/Editor/MarkdownPreview';
 import { Button } from '../components/UI/Button';
-import { Download, Trash2, FilePlus, AlertCircle, ArrowUp } from 'lucide-react';
-
+import { Download, Trash2, ArrowUp } from 'lucide-react';
 import Swal from 'sweetalert2';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function EditorPage() {
+    const { t } = useLanguage();
     const [markdown, setMarkdown] = useState('');
     const [viewMode, setViewMode] = useState('split'); // edit, preview, split
     const [fileName, setFileName] = useState('seemarkdown.md');
@@ -66,29 +67,29 @@ export default function EditorPage() {
 
     const handleClear = () => {
         Swal.fire({
-            title: '¿Estás seguro?',
-            text: "¡No podrás revertir esto!",
+            title: t.editor.confirmClearTitle,
+            text: t.editor.confirmClearText,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#0ea5e9', // primary-500
+            confirmButtonColor: '#0ea5e9',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, borrar todo',
-            cancelButtonText: 'Cancelar',
+            confirmButtonText: t.editor.confirmClearBtn,
+            cancelButtonText: t.editor.cancelBtn,
             background: document.documentElement.classList.contains('dark') ? '#1e293b' : '#fff',
             color: document.documentElement.classList.contains('dark') ? '#f8fafc' : '#1e293b'
         }).then((result) => {
             if (result.isConfirmed) {
                 setMarkdown('');
                 Swal.fire({
-                    title: '¡Borrado!',
-                    text: 'El contenido ha sido eliminado.',
+                    title: t.editor.clearedTitle,
+                    text: t.editor.clearedText,
                     icon: 'success',
                     confirmButtonColor: '#0ea5e9',
                     background: document.documentElement.classList.contains('dark') ? '#1e293b' : '#fff',
                     color: document.documentElement.classList.contains('dark') ? '#f8fafc' : '#1e293b'
-                })
+                });
             }
-        })
+        });
     };
 
     return (
@@ -101,15 +102,15 @@ export default function EditorPage() {
                         value={fileName}
                         onChange={(e) => setFileName(e.target.value)}
                         className="px-2 py-1 rounded border border-gray-300 dark:border-dark-border bg-transparent focus:ring-2 focus:ring-primary-500 outline-none"
-                        placeholder="Nombre del archivo"
+                        placeholder={t.editor.fileNamePlaceholder}
                     />
                 </div>
                 <div className="flex gap-2">
-                    <Button size="sm" variant="secondary" onClick={handleClear} title="Limpiar">
-                        <Trash2 className="h-4 w-4" /> <span className="hidden sm:inline ml-1">Limpiar</span>
+                    <Button size="sm" variant="secondary" onClick={handleClear} title={t.editor.clear}>
+                        <Trash2 className="h-4 w-4" /> <span className="hidden sm:inline ml-1">{t.editor.clear}</span>
                     </Button>
-                    <Button size="sm" onClick={handleDownload} title="Descargar">
-                        <Download className="h-4 w-4" /> <span className="hidden sm:inline ml-1">Descargar</span>
+                    <Button size="sm" onClick={handleDownload} title={t.editor.download}>
+                        <Download className="h-4 w-4" /> <span className="hidden sm:inline ml-1">{t.editor.download}</span>
                     </Button>
                 </div>
             </div>
@@ -129,12 +130,11 @@ export default function EditorPage() {
                         value={markdown}
                         onChange={(e) => setMarkdown(e.target.value)}
                         className="flex-grow w-full p-4 resize-none outline-none font-mono text-sm bg-white dark:bg-dark-bg text-gray-800 dark:text-gray-200"
-                        placeholder="# Empieza a escribir aquí..."
+                        placeholder={t.editor.textareaPlaceholder}
                     />
-                    {/* Status Bar / Error Highlight mock */}
                     <div className="bg-gray-100 dark:bg-dark-surface p-1 text-xs text-gray-500 flex justify-between px-4">
-                        <span>Líneas: {markdown.split('\n').length}</span>
-                        <span>Caracteres: {markdown.length}</span>
+                        <span>{t.editor.lines}: {markdown.split('\n').length}</span>
+                        <span>{t.editor.characters}: {markdown.length}</span>
                     </div>
                 </div>
 
@@ -153,7 +153,7 @@ export default function EditorPage() {
                     {showScrollTop && (
                         <button
                             onClick={scrollPreviewToTop}
-                            title="Volver al inicio"
+                            title={t.editor.scrollToTop}
                             className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary-500 text-white shadow-lg hover:bg-primary-600 transition-all duration-200"
                         >
                             <ArrowUp className="h-5 w-5" />

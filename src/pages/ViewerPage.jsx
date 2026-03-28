@@ -1,12 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
-
-// Wait, I didn't install react-dropzone. I should use native drag and drop or install it.
-// Native is fine and lighter.
 import { Upload, FileText, X, AlertTriangle, ArrowUp } from 'lucide-react';
 import { MarkdownPreview } from '../components/Editor/MarkdownPreview';
 import { Button } from '../components/UI/Button';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ViewerPage() {
+    const { t } = useLanguage();
     const [content, setContent] = useState('');
     const [fileName, setFileName] = useState('');
     const [error, setError] = useState('');
@@ -26,18 +25,18 @@ export default function ViewerPage() {
         if (!file) return;
 
         if (file.size > 5 * 1024 * 1024) {
-            setError('El archivo no puede superar 5MB');
+            setError(t.viewer.errorSize);
             return;
         }
 
         const validMime = ['text/plain', 'text/markdown', 'application/octet-stream'];
         if (!validMime.includes(file.type) && !file.name.endsWith('.md')) {
-            setError('Formato no soportado. Por favor sube un archivo Markdown (.md)');
+            setError(t.viewer.errorFormat);
             return;
         }
 
         if (!file.name.endsWith('.md') && !file.name.endsWith('.txt')) {
-            setError('Formato no soportado. Por favor sube un archivo Markdown (.md)');
+            setError(t.viewer.errorFormat);
             return;
         }
 
@@ -47,7 +46,7 @@ export default function ViewerPage() {
             setFileName(file.name);
         };
         reader.onerror = () => {
-            setError('Error al leer el archivo');
+            setError(t.viewer.errorRead);
         };
         reader.readAsText(file);
     };
@@ -62,17 +61,14 @@ export default function ViewerPage() {
         setIsDragOver(false);
 
         if (e.dataTransfer.items) {
-            // Use DataTransferItemList interface to access the file(s)
-            [...e.dataTransfer.items].forEach((item, i) => {
-                // If dropped items aren't files, reject them
+            [...e.dataTransfer.items].forEach((item) => {
                 if (item.kind === 'file') {
                     const file = item.getAsFile();
                     processFile(file);
                 }
             });
         } else {
-            // Use DataTransfer interface to access the file(s)
-            [...e.dataTransfer.files].forEach((file, i) => {
+            [...e.dataTransfer.files].forEach((file) => {
                 processFile(file);
             });
         }
@@ -104,7 +100,7 @@ export default function ViewerPage() {
                                 <FileText className="h-6 w-6 text-primary-500" />
                                 <h1 className="text-xl font-bold truncate max-w-xs sm:max-w-md">{fileName}</h1>
                             </div>
-                            <Button variant="ghost" onClick={clearFile} title="Cerrar archivo">
+                            <Button variant="ghost" onClick={clearFile} title={t.viewer.closeFile}>
                                 <X className="h-5 w-5" />
                             </Button>
                         </div>
@@ -118,7 +114,7 @@ export default function ViewerPage() {
                 {showScrollTop && (
                     <button
                         onClick={scrollToTop}
-                        title="Volver al inicio"
+                        title={t.viewer.scrollToTop}
                         className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary-500 text-white shadow-lg hover:bg-primary-600 transition-all duration-200"
                     >
                         <ArrowUp className="h-5 w-5" />
@@ -145,14 +141,14 @@ export default function ViewerPage() {
                     <Upload className="h-10 w-10 text-primary-600 dark:text-primary-400" />
                 </div>
 
-                <h2 className="text-2xl font-bold mb-2">Sube tu archivo Markdown</h2>
+                <h2 className="text-2xl font-bold mb-2">{t.viewer.uploadTitle}</h2>
                 <p className="text-gray-500 dark:text-gray-400 mb-8">
-                    Arrastra y suelta tu archivo aquí, o haz clic para seleccionar
+                    {t.viewer.uploadDesc}
                 </p>
 
                 <label htmlFor="file-upload" className="cursor-pointer">
                     <Button as="span" size="lg" className="pointer-events-none">
-                        Seleccionar Archivo
+                        {t.viewer.selectFile}
                     </Button>
                     <input
                         id="file-upload"

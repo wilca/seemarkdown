@@ -3,16 +3,18 @@ import { Moon, Sun, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '../UI/Button';
 import { useTheme } from '../../hooks/useTheme';
+import { useLanguage } from '../../context/LanguageContext';
 
 export function Navbar() {
     const { theme, toggleTheme } = useTheme();
+    const { t, toggleLanguage } = useLanguage();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const location = useLocation();
 
     const navLinks = [
-        { name: 'Inicio', path: '/' },
-        { name: 'Crear Archivo', path: '/editor' },
-        { name: 'Visualizar', path: '/viewer' },
+        { name: t.nav.home, path: '/' },
+        { name: t.nav.editor, path: '/editor' },
+        { name: t.nav.viewer, path: '/viewer' },
     ];
 
     return (
@@ -32,7 +34,7 @@ export function Navbar() {
                             <Link
                                 key={link.path}
                                 to={link.path}
-                                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors 
+                                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors
                   ${location.pathname === link.path
                                         ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/10'
                                         : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
@@ -42,6 +44,10 @@ export function Navbar() {
                             </Link>
                         ))}
 
+                        <Button variant="ghost" size="sm" onClick={toggleLanguage} aria-label="Toggle Language" className="font-semibold text-xs px-2">
+                            {t.nav.toggleLanguage}
+                        </Button>
+
                         <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Toggle Theme">
                             {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                         </Button>
@@ -49,6 +55,9 @@ export function Navbar() {
 
                     {/* Mobile menu button */}
                     <div className="flex md:hidden items-center">
+                        <Button variant="ghost" size="sm" onClick={toggleLanguage} className="mr-1 font-semibold text-xs px-2">
+                            {t.nav.toggleLanguage}
+                        </Button>
                         <Button variant="ghost" size="icon" onClick={toggleTheme} className="mr-2">
                             {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                         </Button>
@@ -68,7 +77,7 @@ export function Navbar() {
                                 key={link.path}
                                 to={link.path}
                                 onClick={() => setIsMenuOpen(false)}
-                                className={`block px-3 py-2 rounded-md text-base font-medium 
+                                className={`block px-3 py-2 rounded-md text-base font-medium
                   ${location.pathname === link.path
                                         ? 'text-primary-600 bg-primary-50 dark:text-primary-400 dark:bg-primary-900/10'
                                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'

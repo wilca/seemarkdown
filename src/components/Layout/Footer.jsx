@@ -1,4 +1,7 @@
+import { useLanguage } from '../../context/LanguageContext';
+
 export function Footer() {
+    const { t } = useLanguage();
     return (
         <footer className="bg-gray-50 dark:bg-dark-surface border-t border-gray-200 dark:border-dark-border py-8 mt-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -6,7 +9,7 @@ export function Footer() {
                     &copy; {new Date().getFullYear()} SeeMarkdown.
                 </p>
                 <p className="text-gray-400 dark:text-gray-500 text-xs mt-2">
-                    Proyecto para edición y visualización de Markdown.
+                    {t.footer.description}
                 </p>
             </div>
         </footer>
